@@ -4,21 +4,21 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const {
   validateSignUpRequest,
-  validateSignInRequest
-} = require("./validation.services/auth.request.validation");
+  validateSignInRequest,
+} = require("./validation.services/auth.validation");
 dotenv.config();
 
 exports.signUp = async (req, res) => {
   const requestData = req.body;
   try {
     const {
-        user_name: userName,
-        email,
-        password,
-        is_admin: isAdmin,
-        phone,
-      } = validateSignUpRequest({ requestData });
-    
+      user_name: userName,
+      email,
+      password,
+      is_admin: isAdmin,
+      phone,
+    } = validateSignUpRequest({ requestData });
+
     const existingUser = await User.findByEmail(email);
     if (existingUser)
       return res.status(400).json({ message: "User already exists." });
@@ -44,9 +44,9 @@ exports.signUp = async (req, res) => {
 };
 
 exports.signIn = async (req, res) => {
-const requestData = req.body;
+  const requestData = req.body;
   try {
-    const { email, password } = validateSignInRequest({requestData});
+    const { email, password } = validateSignInRequest({ requestData });
     const user = await User.findByEmail(email);
     if (!user)
       return res.status(400).json({ message: "Invalid email or password." });
@@ -62,6 +62,6 @@ const requestData = req.body;
     );
     res.json({ token, user_uid: user.user_uid });
   } catch (error) {
-    res.status(500).json({  message: `Server error : ${error.message}`, });
+    res.status(500).json({ message: `Server error : ${error.message}` });
   }
 };

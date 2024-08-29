@@ -11,7 +11,7 @@ const validateProductReq = function ({ requestData }) {
     const { error: { details } = {} } = schema.validate({
       ["product_name"]: requestData["product_name"],
       ["description"]: requestData["description"],
-      ['img_url']: requestData["img_url"],
+      ["img_url"]: requestData["img_url"],
       ["price"]: requestData["price"],
     });
 
@@ -29,19 +29,19 @@ const validateProductReq = function ({ requestData }) {
 const validateUpdateProduct = function ({ requestData }) {
   try {
     const schema = Joi.object({
-        ["product_uid"]: Joi.string().required(),
-        ["product_name"]: Joi.string().optional(),
-        ["description"]: Joi.string().allow("", null).optional(),
-        ["img_url"]: Joi.string().optional(),
-        ["price"]: Joi.number().precision(2).optional(),
+      ["product_uid"]: Joi.number().required(),
+      ["product_name"]: Joi.string().optional(),
+      ["description"]: Joi.string().allow("", null).optional(),
+      ["img_url"]: Joi.string().optional(),
+      ["price"]: Joi.number().precision(2).optional(),
     });
 
     const { error: { details } = {} } = schema.validate({
-        ["product_uid"]: requestData["product_name"],
-        ["product_name"]: requestData["product_name"],
-        ["description"]: requestData["description"],
-        ['img_url']: requestData["img_url"],
-        ["price"]: requestData["price"],
+      ["product_uid"]: requestData["product_name"],
+      ["product_name"]: requestData["product_name"],
+      ["description"]: requestData["description"],
+      ["img_url"]: requestData["img_url"],
+      ["price"]: requestData["price"],
     });
 
     if (details) {
@@ -56,6 +56,6 @@ const validateUpdateProduct = function ({ requestData }) {
 };
 
 module.exports = {
-    validateProductReq,
-    validateUpdateProduct,
+  validateProductReq,
+  validateUpdateProduct,
 };

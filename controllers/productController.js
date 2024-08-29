@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const {
   validateProductReq,
   validateUpdateProduct,
-} = require("./validation.services/product.request.validation");
+} = require("./validation.services/product.validation");
 
 exports.createProduct = async (req, res) => {
   const requestData = req.body;
@@ -25,7 +25,7 @@ exports.createProduct = async (req, res) => {
       .status(201)
       .json({ message: "Product created successfully", product_uid });
   } catch (error) {
-    res.status(500).json({ message: `Server error : ${error.message}`});
+    res.status(500).json({ message: `Server error : ${error.message}` });
   }
 };
 
@@ -44,7 +44,7 @@ exports.updateProduct = async (req, res) => {
   try {
     const requestData = req.body;
     requestData.product_uid = productId;
-    validateUpdateProduct({requestData});
+    validateUpdateProduct({ requestData });
     const userId = req.user.user_uid;
     const affectedRows = await Product.update(productId, updates, userId);
     if (affectedRows === 0)
