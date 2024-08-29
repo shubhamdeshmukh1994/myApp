@@ -15,6 +15,16 @@ exports.createProduct = async (req, res) => {
       img_url: imgUrl,
       price,
     } = validateProductReq({ requestData });
+    const existingProduct = await Product.findProduct({
+      productName,
+      price,
+    });
+    if (existingProduct)
+      return sendResponse({
+        res,
+        statusCode: 400,
+        message: "Product already exists.",
+      });
     const product_uid = await Product.create({
       productName,
       description,
@@ -22,9 +32,12 @@ exports.createProduct = async (req, res) => {
       price,
       createdBy,
     });
-    res
-      .status(201)
-      .json({ message: "Product created successfully", product_uid });
+    return sendResponse({
+        res,
+        statusCode: 201,
+        message: "Product created successfully",
+        data: {product_uid}
+      });
   } catch (error) {
     console.log("error while create product", error);
     return sendResponse({

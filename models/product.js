@@ -26,10 +26,10 @@ class Product {
     }
   }
 
-  static async findById(productId) {
+  static async findProduct({ productName, price }) {
     const [rows] = await db.execute(
-      "SELECT * FROM products WHERE product_uid = ?",
-      [productId]
+      "SELECT * FROM products WHERE product_name LIKE ? AND price = ?;",
+      [`%${productName}%`, price]
     );
     return rows[0];
   }

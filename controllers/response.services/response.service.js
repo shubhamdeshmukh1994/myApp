@@ -21,13 +21,12 @@ const sendResponse = ({
   if (!successStatusCodes.includes(statusCode)) {
     response.status = "failed";
   }
-  if (data) {
-    response.data = data;
-  }
   if (message) {
     response.message = message;
   }
-
+  if (data) {
+    response.data = data;
+  }
   return res.status(statusCode).json(response);
 };
 
