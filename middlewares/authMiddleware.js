@@ -1,8 +1,15 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const dotenv = require("dotenv");
-
 dotenv.config();
+
+/**
+ * Authenticate users with jwt tokens
+ * @param {object} req - request data
+ * @param {object} res - response object
+ * @param {object} next - next middleware
+ * @returns error in required data missing
+ */
 
 const auth = (role) => async (req, res, next) => {
   const token = req?.headers?.authorization?.split(" ")[1];
@@ -16,7 +23,7 @@ const auth = (role) => async (req, res, next) => {
     const user = await User.findById({ userId: decoded?.user_uid });
 
     if (!user) return res.status(401).json({ message: "Invalid token." });
-   
+
     if (role === "admin" && !user.is_admin) {
       return res
         .status(403)
