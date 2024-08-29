@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const { validateUpdateUser } = require("./validation.services/user.validation");
+const { sendResponse } = require("./response.services/response.service");
+
 exports.updateUser = async (req, res) => {
   const { user_uid: userId } = req.params;
   const updates = req.body;
@@ -9,11 +11,22 @@ exports.updateUser = async (req, res) => {
     validateUpdateUser({ requestData });
     const affectedRows = await User.updateUser(userId, updates);
     if (affectedRows === 0)
-      return res.status(404).json({ message: "User not found" });
-
-    res.json({ message: "User updated successfully" });
+      return sendResponse({
+        res,
+        statusCode: 404,
+        message: "User not found",
+      });
+    return sendResponse({
+      res,
+      message: "User updated successfully",
+    });
   } catch (error) {
-    res.status(500).json({ message: `Server error : ${error.message}` });
+    console.error("error while updated user", error);
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };
 
@@ -22,10 +35,22 @@ exports.deleteUser = async (req, res) => {
   try {
     const affectedRows = await User.deleteUser(userId);
     if (affectedRows === 0)
-      return res.status(404).json({ message: "User not found" });
+      return sendResponse({
+        res,
+        statusCode: 404,
+        message: "User not found",
+      });
 
-    res.json({ message: "User deleted successfully" });
+    return sendResponse({
+      res,
+      message: "User deleted successfully",
+    });
   } catch (error) {
-    res.status(500).json({ message: `Server error : ${error.message}` });
+    console.error("error while delete user", error);
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };

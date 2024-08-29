@@ -6,6 +6,7 @@ const {
   validateSignUpRequest,
   validateSignInRequest,
 } = require("./validation.services/auth.validation");
+const { sendResponse } = require("./response.services/response.service");
 dotenv.config();
 
 exports.signUp = async (req, res) => {
@@ -21,8 +22,11 @@ exports.signUp = async (req, res) => {
 
     const existingUser = await User.findByEmail(email);
     if (existingUser)
-      return res.status(400).json({ message: "User already exists." });
-
+      return sendResponse({
+        res,
+        statusCode: 400,
+        message: "User already exists.",
+      });
     const hashedPassword = await bcrypt.hash(password, 10);
     const userId = await User.createUser(
       userName,
@@ -34,10 +38,16 @@ exports.signUp = async (req, res) => {
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.status(201).json({ token, userId });
+    return sendResponse({
+      res,
+      message: "User created successfully",
+      data: { token, userId },
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return sendResponse({
+      res,
+      statusCode: 500,
       message: `Server error : ${error.message}`,
     });
   }
@@ -49,19 +59,33 @@ exports.signIn = async (req, res) => {
     const { email, password } = validateSignInRequest({ requestData });
     const user = await User.findByEmail(email);
     if (!user)
-      return res.status(400).json({ message: "Invalid email or password." });
-
+      return sendResponse({
+        res,
+        statusCode: 400,
+        message: "Invalid email or password.",
+      });
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
-      return res.status(400).json({ message: "Invalid email or password." });
-
+      return sendResponse({
+        res,
+        statusCode: 400,
+        message: "Invalid email or password.",
+      });
     const token = jwt.sign(
       { user_uid: user.user_uid },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.json({ token, user_uid: user.user_uid });
+    return sendResponse({
+      res,
+      message: "User logged in successfully",
+      data: { token, user_uid: user.user_uid },
+    });
   } catch (error) {
-    res.status(500).json({ message: `Server error : ${error.message}` });
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };

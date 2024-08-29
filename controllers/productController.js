@@ -3,6 +3,7 @@ const {
   validateProductReq,
   validateUpdateProduct,
 } = require("./validation.services/product.validation");
+const { sendResponse } = require("./response.services/response.service");
 
 exports.createProduct = async (req, res) => {
   const requestData = req.body;
@@ -25,16 +26,29 @@ exports.createProduct = async (req, res) => {
       .status(201)
       .json({ message: "Product created successfully", product_uid });
   } catch (error) {
-    res.status(500).json({ message: `Server error : ${error.message}` });
+    console.log("error while create product", error);
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };
 
 exports.getVisibleProducts = async (req, res) => {
   try {
     const products = await Product.findAllVisible();
-    res.json(products);
+    return sendResponse({
+      res,
+      data: products,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.log("error while get product", error);
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };
 
@@ -44,16 +58,27 @@ exports.updateProduct = async (req, res) => {
   try {
     const requestData = req.body;
     requestData.product_uid = productId;
+    console.log("productId", productId);
     validateUpdateProduct({ requestData });
     const userId = req.user.user_uid;
     const affectedRows = await Product.update(productId, updates, userId);
     if (affectedRows === 0)
-      return res.status(404).json({ message: "Product not found" });
-
-    res.json({ message: "Product updated successfully" });
+      return sendResponse({
+        res,
+        statusCode: 404,
+        message: "Product not found",
+      });
+    return sendResponse({
+      res,
+      message: "Product updated successfully",
+    });
   } catch (error) {
     console.log("error while update product", error);
-    res.status(500).json({ message: `Server error : ${error.message}` });
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };
 
@@ -62,11 +87,22 @@ exports.deleteProduct = async (req, res) => {
     const { product_uid: productId } = req.params;
     const affectedRows = await Product.deleteProduct(productId);
     if (affectedRows === 0)
-      return res.status(404).json({ message: "Product not found" });
+      return sendResponse({
+        res,
+        statusCode: 404,
+        message: "Product not found",
+      });
 
-    res.json({ message: "Product deleted successfully" });
+    return sendResponse({
+      res,
+      message: "Product deleted successfully",
+    });
   } catch (error) {
     console.log("error while deleting product", error);
-    res.status(500).json({ message: `Server error : ${error.message}` });
+    return sendResponse({
+      res,
+      statusCode: 500,
+      message: `Server error : ${error.message}`,
+    });
   }
 };

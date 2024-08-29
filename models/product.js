@@ -26,10 +26,10 @@ class Product {
     }
   }
 
-  static async findById(product_uid) {
+  static async findById(productId) {
     const [rows] = await db.execute(
       "SELECT * FROM products WHERE product_uid = ?",
-      [product_uid]
+      [productId]
     );
     return rows[0];
   }
@@ -57,7 +57,7 @@ class Product {
     try {
       const [result] = await db.execute(
         "DELETE FROM products WHERE product_uid = ?",
-        [product_uid]
+        [productId]
       );
       return result.affectedRows;
     } catch (error) {

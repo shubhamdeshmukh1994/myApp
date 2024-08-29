@@ -3,7 +3,7 @@ const Joi = require("joi");
 const validateUpdateUser = function ({ requestData }) {
   try {
     const schema = Joi.object({
-      ["user_uid"]: Joi.number().required(),
+      ["user_uid"]: Joi.string().required(),
       ["user_name"]: Joi.string().optional(),
       ["email"]: Joi.string().optional(),
       ["password"]: Joi.string().optional(),

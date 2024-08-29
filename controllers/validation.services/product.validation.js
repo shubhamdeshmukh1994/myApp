@@ -29,7 +29,7 @@ const validateProductReq = function ({ requestData }) {
 const validateUpdateProduct = function ({ requestData }) {
   try {
     const schema = Joi.object({
-      ["product_uid"]: Joi.number().required(),
+      ["product_uid"]: Joi.string().required(),
       ["product_name"]: Joi.string().optional(),
       ["description"]: Joi.string().allow("", null).optional(),
       ["img_url"]: Joi.string().optional(),
