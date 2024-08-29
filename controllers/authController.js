@@ -27,6 +27,15 @@ exports.signUp = async (req, res) => {
         statusCode: 400,
         message: "User already exists.",
       });
+    if (isAdmin) {
+      const getAdmin = await User.findAdmin();
+      if (getAdmin)
+        return sendResponse({
+          res,
+          statusCode: 400,
+          message: "Admin already exists for this account.",
+        });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const userId = await User.createUser(
       userName,

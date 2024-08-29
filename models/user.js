@@ -16,9 +16,19 @@ class User {
 
   static async findByEmail(email) {
     try {
-      const [rows] = await db.execute("SELECT * FROM users WHERE email = ?", [
+      const [rows] = await db.execute("SELECT * FROM users WHERE email = ? and isactive = true", [
         email,
       ]);
+      return rows[0];
+    } catch (error) {
+      console.error("error while findByEmail", error);
+      throw error;
+    }
+  }
+
+  static async findAdmin() {
+    try {
+      const [rows] = await db.execute("SELECT * FROM users WHERE is_admin = true and isactive = true");
       return rows[0];
     } catch (error) {
       console.error("error while findByEmail", error);
