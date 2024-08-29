@@ -1,5 +1,15 @@
 const Joi = require("joi");
 
+/**
+ * validates SignUp Request using joi
+ *
+ * @param {Object} requestData - request object.
+ * @param {string} user_uid - user_uid required.
+ * @param {string} user_name - user_name required.
+ * @param {string} password - password required.
+ * @param {boolean} is_admin - boolean is_admin optinal default false.
+ * @param {string} [phone] - phone required.
+ */
 const validateUpdateUser = function ({ requestData }) {
   try {
     const schema = Joi.object({

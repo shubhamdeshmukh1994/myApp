@@ -1,4 +1,14 @@
 const Joi = require("joi");
+
+/**
+ * validates create Product Request using joi
+ *
+ * @param {Object} requestData - request object.
+ * @param {string} product_name - product_name required.
+ * @param {string} description - description optinal.
+ * @param {string} img_url - img_url required.
+ * @param {number} [price] - price required.
+ */
 const validateProductReq = function ({ requestData }) {
   try {
     const schema = Joi.object({
@@ -26,6 +36,17 @@ const validateProductReq = function ({ requestData }) {
   }
 };
 
+
+/**
+ * validates create Product Request using joi
+ *
+ * @param {Object} requestData - request object.
+ * @param {string} product_uid - product_uid required.
+ * @param {string} product_name - product_name required.
+ * @param {string} description - description optinal.
+ * @param {string} img_url - img_url required.
+ * @param {number} [price] - price required.
+ */
 const validateUpdateProduct = function ({ requestData }) {
   try {
     const schema = Joi.object({
