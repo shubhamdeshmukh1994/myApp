@@ -5,11 +5,12 @@ const { sendResponse } = require("./response.services/response.service");
 exports.updateUser = async (req, res) => {
   const { user_uid: userId } = req.params;
   const updates = req.body;
+  const updateddBy = req.user.user_uid;
   try {
     const requestData = req.body;
     requestData.user_uid = userId;
     validateUpdateUser({ requestData });
-    const affectedRows = await User.updateUser(userId, updates);
+    const affectedRows = await User.updateUser(userId, updates, updateddBy);
     if (affectedRows === 0)
       return sendResponse({
         res,

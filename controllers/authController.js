@@ -19,7 +19,7 @@ exports.signUp = async (req, res) => {
       is_admin: isAdmin,
       phone,
     } = validateSignUpRequest({ requestData });
-
+    const createdBy = req?.user?.user_uid || "system";
     const existingUser = await User.findByEmail(email);
     if (existingUser)
       return sendResponse({
@@ -42,7 +42,8 @@ exports.signUp = async (req, res) => {
       email,
       hashedPassword,
       isAdmin,
-      phone
+      phone,
+      createdBy
     );
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
       expiresIn: "1h",
