@@ -11,9 +11,9 @@ CREATE TABLE products (
     updated_by VARCHAR
 );
 
-register admin
-regiter user
-admin login
-user login
-create update product
-create update users (by addmin);
+-- register admin
+-- regiter user
+-- admin login
+-- user login
+-- create update product
+-- create update users (by addmin);
