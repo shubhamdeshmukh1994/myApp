@@ -9,6 +9,7 @@ dotenv.config();
  * @param {object} req - request data
  * @param {object} res - response object
  * @param {object} next - next middleware
+ * @param {string} role - role to check authorization for current route
  * @returns error in required data missing
  */
 
